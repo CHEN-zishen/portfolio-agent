@@ -1,3 +1,11 @@
+from pathlib import Path
+import sys
+
+# Keep this module runnable both as package code and as a direct Streamlit script.
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    __package__ = "portfolio_app"
+
 import streamlit as st
 
 from .competitions import render_competitions_section
