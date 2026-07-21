@@ -1,0 +1,437 @@
+--- Page 1 ---
+Basic Information and Academic Performance
+Name: Zishen Chen
+Gender: Male
+Date of Birth: July 26, 2004Tel:136-0010-8119
+Email：23zschen@stu.edu.cn
+github：https://github.com/CHENzishen
+Human-computer interaction (94)
+Web application technology (93)
+Cloud computing and data centers (93)
+Biological and medical big data (96)Data Science and Big 
+Data Technology      
+Shantou University      
+ GPA：4/5      
+ Ranking by 
+grades: Top 10%
+Principles of Computer Organization（95）
+Data Acquisition Technology (95)
+Data Structures and Algorithms (93)
+Data Visualization (97)Major courses:
+ English proficiency:
+ CET-4, CET-6, IELTS
+
+
+--- Page 2 ---
+Research project
+Surgi-Diff: A Diffusion-Based Generative Framework for Postoperative 
+Outcome Prediction and Surgical Planning in Adolescent Idiopathic ScoliosisTitle of the paper
+Research content
+This research proposes Surgi-Diff, a diffusion generative framework integrated with a 
+Spine Alignment Encoder, to generate anatomically consistent postoperative spinal X-
+rays and predict implant structures for automated preoperative surgical planning and 
+postoperative outcome prediction of adolescent idiopathic scoliosis.
+Research results
+Experiments on a cohort of 612 AIS patients show that Surgi-Diff achieves the highest 
+SSIM among all comparison methods, accurately predicts fusion segments, rods and 
+screw distributions, and generates postoperative X-rays highly consistent with real 
+ground truth, verifying its clinical value for scoliosis surgical decision support.
+
+--- Page 3 ---
+Research project
+method PSNR (dB)↑ SSIM↑
+Mean SD Mean SD
+Pix2pix 11.55 1.07 0.19 0.04
+CycleGAN 11.49 1.12 0.20 0.05
+ControlLoRA 10.05 0.88 0.14 0.03
+ControlNet 8.67 0.65 0.11 0.03
+StyleGANex 15.64 1.31 0.34 0.05
+Surgi-Diff 14.25 2.07 0.35 0.14The experimental results show that Surgi-Diff achieved the highest SSIM 
+value and competitive PSNR value in the comparison method, and the 
+qualitative results indicate a strong consistency with the actual 
+postoperative morphology and implant layout. These results suggest that 
+Surgi-Diff has potential clinical value in preoperative planning and 
+postoperative management of AIS.Overview of the proposed Surgi-Diff for surgical parameter prediction and 
+postoperative spinal X-ray synthesis.
+
+--- Page 4 ---
+Research project
+Category Metric Symbol Result
+Fusion Level 
+IdentificationAccuracy Acc 75.8%
+Boundary Index 
+Error(UIV)EUIV​ 8.40 pixel
+Boundary Index 
+Error(LIV)ELIV​ 7.88 pixel
+Rod Geometry 
+MeasurementLength Error EL​ 19.36 pixel
+Endpoint Error Eend​ 4.50 pixel
+Centerline Error Ecline​ 2.41 pixel
+Screw Distribution Quantity Error E#​ 1.09
+Position Error Epos​ 5.49 pixel
+In terms of fusion level identification, the proposed Surgi-Diff achieves an accuracy of 75.8% within a 10-pixel tolerance, with boundary index errors of 8.40 
+pixels for UIV (????) and 7.88 pixels for LIV (????), both below the 10-pixel threshold. For rod geometry measurement, the model delivers precise rod 
+trajectory capture with a centerline error of only 2.41 pixels, despite a relatively large length error (EL​=19.36). Regarding screw distribution, it yields an 
+average quantity error of 1.09 and a position error of 5.49 pixels, demonstrating competent performance in localizing spinal implants. Collectively, these 
+results verify that Surgi-Diff establishes a reliable foundation for automated spinal instrumentation analysis.
+
+--- Page 5 ---
+Research project
+?2Net: A Geometry-Guided Network for Accurate Spine Morphology 
+Estimation from a Single RGB Image of Human BackTitle of the paper
+Research content
+This study proposes a two-stage geometry-guided G²Net for radiation-free spinal 
+morphology estimation from single back RGB images of AIS patients. It first predicts 
+precise back-surface depth via global-local feature fusion and Mamba modules, then 
+leverages RGB-depth cues to train a LoRA-based conditional diffusion model to 
+generate anatomically consistent spine curves. Experiments on a clinical dataset of 
+2,213 adolescents validate its superior performance against state-of-the-art methods.
+Research results
+Experiments on 2,213 clinical samples demonstrate that G²Net surpasses mainstream 
+comparison methods, achieving a spine curve SSIM of 0.950 with low shape errors. 
+Ablation tests verify the necessity of all core modules.
+
+
+--- Page 6 ---
+Research project
+•Global depth estimation, on the other hand, can 
+generate smoother and more consistent depth 
+estimation maps, but at the cost of over-smoothing 
+local fluctuations.
+•Models trained based on local image blocks can 
+achieve higher regional accuracy, but often introduce 
+discontinuities near the boundaries of image blocks.
+To address these issues, this paper proposes G²Net, a geometric-guided framework that enables non-
+radiative and accurate spinal shape estimation from a single back surface RGB image. G²Net 
+decomposes spinal shape estimation into two stages:In the first stage, high-fidelity back surface 
+depth estimation is achieved through joint modeling of global continuity and local block-based cues.
+In the second stage, the estimated depth map and RGB image are used as geometric and appearance 
+conditions to generate a compact spinal curve diagram, thereby characterizing the spinal shape.
+Detailed framework of 
+the Mamba-based 
+feature integrator, where 
+the SSM module adopts 
+the Structured State 
+Space Model 
+formulation derived 
+from classical State 
+Space Model theory. 
+Illustration of regional inconsistency in existing monocular 
+depth estimation methods. From left to right, real depth, 
+overall back depth estimation and depth estimation on each 
+local partition. These results highlight the challenge of 
+achieving both global continuity and local detail 
+preservation when estimating centimeter-scale back-surface 
+depth from RGB images.Overview of the proposed ?2Net. 
+
+--- Page 7 ---
+Research project
+Detailed framework of the SpineLoRANet. The LoRABlock 
+approximates weight updates by introducing two low-rank 
+matrices, LoRA-A and LoRA-B. LoRA-A projects the input into 
+a low-dimensional space, whilst LoRA-B projects it back to the 
+original dimension, thereby enabling parameter-efficient 
+adaptation to downstream tasksOverview of the Cross-
+scale Feature Fusion 
+module, where ASPP 
+(Atrous Spatial Pyramid 
+Pooling) is a spatial 
+pyramid module 
+composed of parallel 
+atrous convolutions with 
+different dilation rates for 
+multi-scale representation.
+Detailed framework of the cascade upsampling decoder module.
+
+--- Page 8 ---
+Research project
+Visual comparison of back-surface depth estimation results. Visual comparison of spinal morphology estimation using different models.
+
+--- Page 9 ---
+Research project
+•Removing the image encoder would severely damage the core deep 
+representation, resulting in a decline in prediction accuracy, and causing 
+significant deviations at anatomical boundaries.
+•Removing the Mamba-based feature integrator would cause discontinuity in 
+depth transition, and blur the representation in local areas (especially the 
+lumbar region), highlighting the crucial role of this module in cross-level 
+feature fusion.
+•Omitting the cross-scale feature fusion module would disrupt the depth 
+consistency between multiple scales, verifying its core value in enhancing 
+semantic-geometric synergy.
+•The variant without the cascade upsampling decoder shows the most obvious 
+artifacts and depth prediction misalignment in the back and lumbar regions, 
+revealing the importance of the decoder in progressive resolution restoration 
+and contour fidelity.
+Model VariantComponents Metrics
+ConvNeXt image encoderMamba-based feature integratorCross-scale feature fusion moduleCascade upsampling decoder???? ↓ ?RMSE ↓ ?SR? ↓ δ1 ↑ δ2 ↑ δ3 ↑
+w/o ConvNeXt image encoder✗ ✓ ✓ ✓ 0.690 0.251 0.332 0.538 0.702 0.788
+w/o Mamba-based feature integrator✓ ✗ ✓ ✓ 0.714 0.255 0.342 0.531 0.695 0.782
+w/o Cross-scale feature fusion module✓ ✓ ✗ ✓ 0.698 0.256 0.334 0.524 0.690 0.778
+w/o Cascade upsampling decoder✓ ✓ ✓ ✗ 0.707 0.182 0.166 0.558 0.730 0.796
+G²Net (full model) ✓ ✓ ✓ ✓ 0.158 0.060 0.011 0.821 0.940 0.976Ablation Study on the Components of our model
+
+--- Page 10 ---
+Research project
+Journal: Chaos, Solitons and Fractals    JCR Rank: SCI Q1 Top Journal
+2026 JCR Impact Factor: 5.7
+Title: MDHGFN: Multiscale Dual Hypergraph Fusion Spatiotemporal 
+Network for Traffic Flow PredictionThesis 
+Publication
+Patent Title:一种基于多尺度对偶超图融合的交通流预测方法
+Application Number:202510759638.1Invention 
+Patent
+
+
+--- Page 11 ---
+Research project
+Traffic Feature 
+Matrix 
+X ∈ ??×?×?Transportation 
+Topology Map
+G = (V, E, A) 
+Historical 
+traffic 
+flow dataMultiscale Dual 
+Hypergraph 
+Construction ModuleSpatial perception 
+moduleTime perception 
+moduleTraffic flow 
+prediction results
+Ø Model architecture diagram
+
+--- Page 12 ---
+Research project
+ØMicroscopic scale - Travel correlation dual hypergraph ??   = (??, ??, ??)
+ØMesoscopic scale - Functional community dual hypergraph ??   = (??, ?c, ??)
+üBased on the original adjacency matrix, the functional similarity ??,?? between nodes (with smaller values 
+indicating greater similarity) is calculated.
+üThe K-nearest neighbor algorithm is used to select the c most functionally similar neighbors for each node 
+(origin and destination) to form functional community hyperedges ???∈??. At the same time, the spatial 
+distance between nodes within the hyperedge is constrained to be the shortest. 
+ü????? and ????? together constitute the complete topological structure of the functional community dual 
+hypergraph, ??üConstruct the origin hyper-edge connection relationship for all nodes that share the same road node as the starting 
+point.?????
+üConstruct destination hyper-edge connection relationships for all nodes that share the same road node as the 
+destination.?????
+ü????? and ????? together constitute the complete topological structure of the travel-related dual hypergraph.??
+ØMacroscopic scale - Regional conduction dual hypergraph ??   = (??, ?r, ??)
+üThrough Top-K sampling, select the top K most influential starting and ending neighbors for each node, construct 
+the node influence matrix Ar, and combine the Top-K influence neighbor sets of each node as hyperedges ???∈?r 
+ü????? and ????? together constitute the complete topological structure of the regional conduction dual hypergraph, 
+??
+
+--- Page 13 ---
+Research project
+ØDataset: PEMS03, PEMS04, PEMS07 and PEMS08, 
+collected by the California Department of Transportation 
+through its Highway Performance Measurement System 
+(PEMS), and have been widely applied in the field of traffic 
+flow research.
+The dataset was divided into 60% for training, 20% for validation, 
+and 20% for testing, which is consistent with the baseline method.
+Evaluation metrics: Three widely used evaluation metrics were 
+adopted to assess the performance of the model: Mean Absolute Error 
+(MAE), Mean Absolute Percentage Error (MAPE), and Root Mean 
+Square Error (RMSE).ØBaseline: 14 baseline methods were selected for comparison 
+experiments with the proposed method, and the parameter settings 
+recommended in the original paper were followed to ensure the 
+reliability and fairness of the comparison results.
+Dataset Nodes Number Edges NumberTime Steps Date Range
+PEMS03 358 547 26208 09/01/2018 - 11/30/2018
+PEMS04 307 340 16992 01/01/2018 - 02/28/2018
+PEMS07 883 866 28224 05/01/2017 - 08/31/2017
+PEMS08 170 295 17856 07/01/2016 - 08/31/2016Statistical information of the dataset
+Model Abbreviation Publication Year Core Innovation
+FC-LSTM 2015Fully connected LSTM structure focusing on time-series 
+modeling
+DCRNN 2017Bidirectional random walk with an encoder-decoder 
+framework
+STGCN 2018Fully convolutional graph structure for efficient spatio-
+temporal modeling
+Graph WaveNet 2019 Adaptive dependency matrix and dilated convolution
+STSGCN 2020Synchronous spatio-temporal modeling and temporal 
+heterogeneity handling
+OGCRNN 2020 Data-driven graph structure optimization
+STGODE 2021 Tensor differential equation and semantic adjacency matrix
+STFGNN 2021 Spatio-temporal graph fusion and gated convolution
+GMSDR 2022 Explicit modeling of multi-step dependencies
+FEDformer 2022Frequency-domain enhancement and seasonal-trend 
+decomposition
+HSTGCNT 2023Integration of hierarchical Transformer and hypergraph 
+convolution
+AGFCRN 2024 Adaptive hypergraph fusion and attention mechanism
+DS-STGCN 2024 Dynamic multi-scale spatio-temporal modeling
+CDAGF 2024 Contrastive learning and residual-enhanced decompositionBaseline Model Comparison Summary
+
+--- Page 14 ---
+Research project
+The evaluation results on all datasets have reached the current optimal level, and 
+the performance on large-scale datasets is superior to that on small-scale datasets.Performance comparison results of different baseline models and MDGFN on each dataset
+⑤ Due to the limitations of the low-order 
+graph structure and the expressive capacity 
+of the single-scale hypergraph, it is 
+impossible to fully extract the multi-scale 
+high-order spatial information contained in 
+the traffic flow data.① Traditional sequential modeling 
+methods failed to effectively model 
+spatial dependence.② The introduction of graph structures to capture 
+spatial characteristics still has shortcomings in 
+modeling long-term sequence dependence and 
+dynamic spatial relationships. ③ Its performance on large-scale datasets 
+remains limited, and it is difficult to 
+comprehensively capture the complex 
+spatiotemporal characteristics.
+④ It performs 
+well in long-
+term sequence 
+prediction, but 
+still has certain 
+limitations in 
+modeling 
+complex 
+spatial 
+dependencies.
+
+--- Page 15 ---
+Research project
+ØModule ablation experiment ØSupergraph ablation experiment
+The ablation experiment results of different model variants on the 
+PEMS03 and PEMS08 datasetsJoint learning of multi-scale dual hypergraphs can effectively 
+integrate high-order spatial information at different scales, 
+significantly improving the performance of the model.
+The experimental results show that the complete model outperforms all the 
+ablation variants in terms of RMS E, MAE and MAPE metrics, thereby 
+verifying the crucial role of the HSAM and TAEM modules in the 
+modeling of spatio-temporal characteristics.Datasets Model RMSE MAE MAPE (%)
+PEMS03MDHGFN w/o 
+both HSAM and 
+TAEM23.48 14.91 13.83
+PEMS03MDHGFN w/o 
+HSAM23.07 14.64 13.51
+PEMS03MDHGFN w/o 
+TAEM22.68 14.21 13.39
+PEMS03 MDHGFN 22.52 14.12 12.95
+PEMS08MDHGFN w/o 
+both HSAM and 
+TAEM26.54 16.72 12.93
+PEMS08MDHGFN w/o 
+HSAM25.57 15.90 11.89
+PEMS08MDHGFN w/o 
+TAEM25.26 15.52 11.82
+PEMS08 MDHGFN 25.20 15.45 11.50The ablation experiment results of different-scale dual hypergraph 
+combinations on the PEMS03 and PEMS08 datasets
+Datasets Dual Hypergraph RMSE MAE MAPE (%)
+PEMS03 [??] 22.63 14.23 13.01
+PEMS03 [??] 22.66 14.30 13.48
+PEMS03 [??] 22.88 14.53 15.03
+PEMS03 [??, ??, ??] 22.52 14.12 12.95
+PEMS08 [??] 25.49 15.48 11.52
+PEMS08 [??] 25.36 15.53 12.07
+PEMS08 [??] 25.52 15.46 11.57
+PEMS08 [??, ??, ??] 25.20 15.45 11.50
+
+--- Page 16 ---
+Research project
+ØHyperparameter experiment result graph
+üA smaller K value may lead to insufficient community division, failing to capture the extensive interaction information 
+between regions; while a larger K value introduces too many irrelevant nodes, resulting in redundancy and affecting the 
+extraction of spatial features. 
+üSimilarly, a smaller Top-k value may ignore the critical path dependency information, while an overly large Top-k value will 
+introduce irrelevant paths and interfere with the modeling of critical dependency relationships. 
+üBased on the comprehensive experimental results, appropriately setting the values of K and Top-k can effectively balance the 
+feature sufficiency and redundancy, fully leveraging the advantages of the functional community dual hypergraph and the 
+regional conduction dual hypergraph, thereby significantly enhancing the model's ability to model high-order spatiotemporal 
+relationships.Evaluate the impact of different K 
+values (the number of KNN neighbors 
+used for the functional community dual 
+hypergraph) and Top-k values (the 
+number of key nodes selected for the 
+regional conduction dual hypergraph) on 
+the model performance
+
+--- Page 17 ---
+Research project
+ScolioLDM: Towards Accurate Postoperative Radiograph Synthesis for 
+Scoliosis with Morphology-Guided Latent Diffusion ModelTitle of the paper
+Research content
+This work designs ScolioLDM, which uses predicted spine contour maps and a 
+MGCM to guide latent diffusion for high-fidelity AIS postoperative X-ray synthesis, 
+validated on a 612-patient clinical dataset.
+Research results
+Experiments on 612 AIS cases prove ScolioLDM outperforms mainstream generative 
+models, achieving top PSNR and NCC. Ablations verify spine contour maps and 
+MGCM are vital for realistic spine and implant reconstruction.
+
+
+--- Page 18 ---
+Research project
+Detailed illustration of the Morphology-Guided Control 
+Module (MGCM) embedded in the proposed 
+ScolioLDM framework.
+Overview of the proposed ScolioLDM. The left part presents the overall framework for 
+postoperative radiograph synthesis, while the right part illustrates the detailed architecture of the 
+core denoising U-Net integrated with the MGCM. ControlNet is used to introduce additional 
+structural conditions into the diffusion model for controllable postoperative radiograph synthesis .
+Illustration of postoperative radiograph synthesis 
+directly using mainstream conditional generative 
+models.When directly applied to in-modality 
+transformations between preoperative and 
+postoperative spinal radiographs, these models often 
+fail to capture the complex changes in bone and 
+overall spinal shape, resulting in blurred structural 
+boundaries, increased artefacts, and poor anatomical 
+consistency.
+
+--- Page 19 ---
+Research project
+Method SSIM ↑ PSNR ↑ MAE ↓ GradMAE ↓ NCC ↑
+ControlNet 0.831 ± 0.009 19.726 ± 1.121 0.036 ± 0.005 0.054 ± 0.005 0.877 ± 0.03
+pix2pix 0.846 ± 0.007 19.432 ± 0.861 0.035 ± 0.004 0.061 ± 0.006 0.861 ± 0.03
+ControlNeXt 0.841 ± 0.010 19.179 ± 1.140 0.037 ± 0.006 0.059 ± 0.007 0.864 ± 0.03
+BBDM 0.856 ± 0.010 19.654 ± 1.118 0.034 ± 0.005 0.053 ± 0.006 0.869 ± 0.03
+Fast-DDPM 0.810 ± 0.011 17.539 ± 1.987 0.049 ± 0.015 0.067 ± 0.012 0.843 ± 0.06
+ScolioLDM 0.841 ± 0.011 20.436 ± 1.322 0.032 ± 0.006 0.051 ± 0.006 0.892 ± 0.03Variant SSIM ↑ PSNR ↑ MAE ↓GradMAE ↓NCC ↑
+w/o MGCM0.836 ± 
+0.00919.951 ± 
+1.1420.034 ± 
+0.0050.053 ± 
+0.0050.882 ± 
+0.035
+w/o 
+postoperativ
+e curve map0.822 ± 
+0.00819.226 ± 
+1.0070.039 ± 
+0.0050.057 ± 
+0.0060.857 ± 
+0.039
+ScolioLDM0.841 ± 
+0.01120.436 ± 
+1.3220.032 ± 
+0.0060.051 ± 
+0.0060.892 ± 
+0.035
+Overall, both the 
+quantitative and 
+qualitative results 
+demonstrate that the 
+proposed framework 
+can synthesize 
+postoperative 
+radiographs with 
+high anatomical 
+fidelity, structural 
+consistency, and 
+visual realism, while 
+also confirming that 
+MGCM and 
+postoperative curve 
+map guidance are 
+essential components 
+that significantly 
+enhance the 
+anatomical accuracy 
+and visual quality of 
+the synthesized 
+results.
