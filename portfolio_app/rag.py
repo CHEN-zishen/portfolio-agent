@@ -869,6 +869,30 @@ def should_focus_volunteer_experience(question: str, category_dir: Optional[str]
     return category_dir in (None, "resume") and contains_any_query_term(question, volunteer_terms)
 
 
+def should_focus_large_model_work(question: str, category_dir: Optional[str]) -> bool:
+    large_model_terms = [
+        "大模型", "基础模型", "生成式", "生成模型", "多模态", "视觉大模型", "医学大模型",
+        "大语言模型", "llm", "large language model", "large model", "foundation model",
+        "generative ai", "diffusion", "latent diffusion", "stable diffusion", "lora",
+        "mamba", "transformer", "vision transformer", "multimodal",
+    ]
+    role_terms = [
+        "工程师", "研究员", "岗位", "职位", "申请", "优势", "匹配", "适合", "能不能",
+        "engineer", "researcher", "role", "job", "fit", "advantage", "application",
+    ]
+    work_terms = [
+        "工作", "论文", "研究", "项目", "经历", "能力", "背景", "方向", "文章",
+        "work", "paper", "research", "project", "experience", "background",
+    ]
+    if category_dir not in (None, "papers", "projects", "resume"):
+        return False
+    return contains_any_query_term(question, large_model_terms) and (
+        contains_any_query_term(question, role_terms)
+        or contains_any_query_term(question, work_terms)
+        or category_dir in ("papers", "projects", "resume")
+    )
+
+
 def _dedupe_documents(docs: List[Document]) -> List[Document]:
     seen = set()
     unique_docs = []
@@ -890,8 +914,76 @@ def _dedupe_documents(docs: List[Document]) -> List[Document]:
     return unique_docs
 
 
+def get_documents_by_source(vectorstore: Chroma, sources: List[str], limit_per_source: int = 2) -> List[Document]:
+    docs: List[Document] = []
+    for source in sources:
+        try:
+            results = vectorstore.get(
+                where={"source": source},
+                include=["documents", "metadatas"],
+                limit=limit_per_source,
+            )
+        except Exception:
+            continue
+        documents = results.get("documents") or []
+        metadatas = results.get("metadatas") or []
+        for page_content, metadata in zip(documents, metadatas):
+            docs.append(Document(page_content=page_content or "", metadata=metadata or {}))
+    return docs
+
+
 def retrieve_context(question: str, category_dir: Optional[str], top_k: int) -> List[Document]:
     vectorstore = get_vectorstore()
+    if should_focus_large_model_work(question, category_dir):
+        focused_query = (
+            f"{question} diffusion latent diffusion LoRA Mamba Transformer multimodal medical image generation "
+            "ScolioLDM Surgi-Diff G2Net VentureAgent DeepSeek LLM"
+        )
+        paper_docs = vectorstore.similarity_search(
+            focused_query,
+            k=max(top_k * 3, 14),
+            filter={"category": "papers"},
+        )
+        project_docs = vectorstore.similarity_search(
+            focused_query,
+            k=max(top_k, 6),
+            filter={"category": "projects"},
+        )
+        resume_docs = vectorstore.similarity_search(
+            focused_query,
+            k=max(top_k, 6),
+            filter={"category": "resume"},
+        )
+        profile_docs = vectorstore.similarity_search(
+            focused_query,
+            k=3,
+            filter={"source": "portfolio_app/data.py::PROFILE"},
+        )
+        anchor_docs = get_documents_by_source(
+            vectorstore,
+            [
+                "portfolio_app/data.py::RESEARCH_PAPERS/scolioldm",
+                "portfolio_app/data.py::RESEARCH_PAPERS/g2net",
+                "portfolio_app/data.py::RESEARCH_PAPERS/smo_diff",
+                "portfolio_app/data.py::RESEARCH_PAPERS/surgidiff",
+                "portfolio_app/data.py::PROJECTS/venture_agent",
+                "portfolio_app/data.py::PROJECTS/social_diffusion",
+                "portfolio_app/data.py::INTERNSHIPS/hku",
+            ],
+            limit_per_source=1,
+        )
+        balanced_docs = (
+            anchor_docs
+            + paper_docs[:4]
+            + project_docs[:3]
+            + resume_docs[:3]
+            + profile_docs
+            + paper_docs[4:]
+            + project_docs[3:]
+            + resume_docs[3:]
+        )
+        return _dedupe_documents(balanced_docs)[:max(top_k, 10)]
+
     if should_focus_volunteer_experience(question, category_dir):
         volunteer_docs = vectorstore.similarity_search(
             question,
@@ -1091,6 +1183,8 @@ Current year: {current['year']}
 No-evidence sentence: {no_evidence_reply}
 
 Language rule: You must write the answer body in the Required response language above. Do not switch language because the retrieved chunks, titles, or prior messages are in another language.
+
+Large-model interpretation rule: If the question asks about large-model work, foundation models, generative AI, multimodal AI, or large-model engineer fit, treat retrieved evidence about Diffusion Models, Latent Diffusion, LoRA, Mamba, Transformer-based methods, medical image generation, and multimodal/vision modeling as relevant large-model/foundation-model experience. Do not reduce "large-model experience" only to LLM API products, SFT/RLHF, distributed pretraining, or inference serving. When useful, distinguish the applicant's strong generative/vision foundation-model research and LLM application engineering evidence from any missing large-scale LLM pretraining, RLHF/SFT, compression, or vLLM/Triton deployment evidence.
 
 Evidence rule: Use Retrieved document chunks for the portfolio owner's background, achievements, papers, projects, internships, skills, and personal fit. You may use the Current date/weekday/year above for date arithmetic such as calculating age from a retrieved date of birth. Use Web search evidence only for external school/program/admission/faculty/curriculum facts. If both evidence blocks are provided, synthesize them while keeping the source boundary clear. If Retrieved document chunks is None and Web search evidence is provided, discuss only external school/program facts and say that portfolio evidence is not available. If both evidence blocks are None, reply only with the no-evidence sentence above.
 
