@@ -7,7 +7,6 @@ import streamlit as st
 from .assets import (
     get_portfolio_image,
     get_research_visual,
-    read_file_bytes,
     get_pdf_thumbnail,
     get_pdf_clean_thumbnail,
     get_pdf_svg,
@@ -82,7 +81,6 @@ def render_research_paper_detail(paper: Dict) -> None:
     if st.button("← Back to Research Papers", key="back-to-papers", help="Return to the research papers list"):
         st.session_state.selected_research_paper = None
         st.session_state[f"load_figures_{paper['id']}"] = False
-        st.session_state[f"download_ready_{paper['id']}"] = False
         st.session_state[f"gallery_active_tab_{paper['id']}"] = None
         try:
             if "paper" in st.query_params:
@@ -96,21 +94,6 @@ def render_research_paper_detail(paper: Dict) -> None:
     else:
         _render_hero_simple(paper)
         render_standard_detail(paper)
-
-    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
-    if st.button("Prepare PDF Download", use_container_width=True, key=f"prepare-download-{paper['id']}"):
-        st.session_state[f"download_ready_{paper['id']}"] = True
-
-    if st.session_state.get(f"download_ready_{paper['id']}"):
-        pdf_bytes = read_file_bytes(paper["pdf"])
-        st.download_button(
-            label="Download Full Paper PDF",
-            data=pdf_bytes,
-            file_name=paper["pdf"].name,
-            mime="application/pdf",
-            use_container_width=True,
-            key=f"detail-download-{paper['id']}",
-        )
 
 
 def _render_hero_simple(paper: Dict) -> None:
