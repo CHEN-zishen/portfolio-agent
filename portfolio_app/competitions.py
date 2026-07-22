@@ -4,7 +4,7 @@ from urllib.parse import quote
 
 import streamlit as st
 
-from .assets import get_image_base64
+from .assets import get_image_base64, get_image_thumbnail_base64
 from .data import COMPETITION_AWARDS
 
 
@@ -81,12 +81,12 @@ def _sorted_awards(awards: List[Dict]) -> List[Dict]:
 
 
 def _award_card_html(award: Dict) -> str:
-    image_base64 = get_image_base64(award["image"])
+    image_base64 = get_image_thumbnail_base64(award["image"], max_width=700, max_height=520, quality=82)
     level_color = LEVEL_COLORS.get(award["level"], "#6f7d7b")
     category_mark = CATEGORY_MARKS.get(award["category"], "AWD")
     chips = "".join(f'<span class="competition-chip">{escape(tag)}</span>' for tag in award["tags"])
     image_html = (
-        f'<img class="competition-image" src="data:{_image_mime(award["image"])};base64,{image_base64}" loading="lazy" />'
+        f'<img class="competition-image" src="data:image/jpeg;base64,{image_base64}" loading="lazy" />'
         if image_base64
         else f'<div class="competition-image-placeholder">{escape(category_mark)}</div>'
     )

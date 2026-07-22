@@ -4,7 +4,12 @@ from urllib.parse import quote
 
 import streamlit as st
 
-from .assets import get_image_base64, get_pdf_thumbnail
+from .assets import (
+    get_image_base64,
+    get_image_thumbnail_base64,
+    get_pdf_card_thumbnail,
+    get_pdf_thumbnail,
+)
 from .data import INTERNSHIPS, PRACTICES
 
 
@@ -81,20 +86,20 @@ def _build_card_image(item: Dict) -> str:
         return ""
 
     if item.get("image_type") == "pdf":
-        thumbnail = get_pdf_thumbnail(image_path)
+        thumbnail = get_pdf_card_thumbnail(image_path, max_width=700, max_height=520, quality=82)
         if thumbnail:
             return (
-                f'<img src="data:image/png;base64,{thumbnail}" '
+                f'<img src="data:image/jpeg;base64,{thumbnail}" '
                 'class="experience-card-image experience-card-document" loading="lazy" />'
             )
         return ""
 
-    image_base64 = get_image_base64(image_path)
+    image_base64 = get_image_thumbnail_base64(image_path, max_width=700, max_height=520, quality=82)
     if not image_base64:
         return ""
 
     return (
-        f'<img src="data:{_image_mime(image_path)};base64,{image_base64}" '
+        f'<img src="data:image/jpeg;base64,{image_base64}" '
         'class="experience-card-image" loading="lazy" />'
     )
 

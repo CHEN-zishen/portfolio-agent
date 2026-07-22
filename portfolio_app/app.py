@@ -8,12 +8,6 @@ if __package__ in {None, ""}:
 
 import streamlit as st
 
-from .competitions import render_competitions_section
-from .data import COMPETITION_AWARDS, PROJECTS, RESEARCH_PAPERS
-from .profile import render_profile_card
-from .projects import render_projects_section
-from .internships import render_internships_section
-from .research import render_research_papers_section
 from .sidebar import render_sidebar
 from .state import clear_research_detail_state, init_session_state
 from .styles import render_css
@@ -109,29 +103,41 @@ def main() -> None:
         _clear_query_value("project")
 
     if category_label == "Research Papers":
+        from .data import RESEARCH_PAPERS
+        from .research import render_research_papers_section
+
         for paper in RESEARCH_PAPERS:
             if st.session_state.get(f"view-{paper['id']}"):
                 st.session_state.selected_research_paper = paper["id"]
                 break
         render_research_papers_section()
     elif category_label == "Competitions & Awards":
+        from .competitions import render_competitions_section
+        from .data import COMPETITION_AWARDS
+
         for award in COMPETITION_AWARDS:
             if st.session_state.get(f"view-comp-{award['id']}"):
                 st.session_state.selected_competition = award["id"]
                 break
         render_competitions_section()
     elif category_label == "Engineering Projects":
+        from .data import PROJECTS
+        from .projects import render_projects_section
+
         for project in PROJECTS:
             if st.session_state.get(f"view-project-{project['id']}"):
                 st.session_state.selected_project = project["id"]
                 break
         render_projects_section()
     elif category_label == "Internships & Practices":
+        from .internships import render_internships_section
+
         render_internships_section()
     elif category_label == "Home / AI Assistant":
         with st.spinner("Preparing portfolio knowledge base..."):
             init_home_agent_once()
         from .chat import render_home_chat
+        from .profile import render_profile_card
 
         render_profile_card()
         render_home_chat(api_key=api_key, top_k=top_k)

@@ -9,11 +9,7 @@ from .config import AVATAR_PATH, PORTFOLIO_PDF, RESEARCH_THUMB_DIR
 def get_avatar_base64() -> str:
     try:
         if AVATAR_PATH.exists():
-            if AVATAR_PATH.stat().st_size > 5 * 1024 * 1024:
-                return ""
-            import base64
-            with open(AVATAR_PATH, "rb") as f:
-                return base64.b64encode(f.read()).decode("utf-8")
+            return get_image_thumbnail_base64(AVATAR_PATH, max_width=360, max_height=360, quality=86)
     except Exception:
         pass
     return ""
@@ -43,6 +39,85 @@ def _cache_stem(path: Path, limit: int = 56) -> str:
     safe = "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in path.stem)
     safe = safe[:limit].strip("_") or "asset"
     return f"{safe}_{digest}"
+
+
+@st.cache_data(show_spinner=False)
+def get_image_thumbnail_base64(
+    path: Path,
+    max_width: int = 720,
+    max_height: int = 520,
+    quality: int = 82,
+) -> str:
+    """Return a lightweight JPEG thumbnail for list/card previews only."""
+    if not path.exists():
+        return ""
+
+    RESEARCH_THUMB_DIR.mkdir(parents=True, exist_ok=True)
+    thumb_path = (
+        RESEARCH_THUMB_DIR
+        / f"{_cache_stem(path, 58)}_card_{max_width}x{max_height}_q{quality}.jpg"
+    )
+    if thumb_path.exists():
+        return get_image_base64(thumb_path)
+
+    try:
+        from PIL import Image, ImageOps
+
+        resample = getattr(Image, "Resampling", Image).LANCZOS
+        image = Image.open(path)
+        image = ImageOps.exif_transpose(image)
+        if image.mode in {"RGBA", "LA"}:
+            image = image.convert("RGBA")
+            background = Image.new("RGB", image.size, "white")
+            background.paste(image, mask=image.getchannel("A"))
+            image = background
+        elif image.mode != "RGB":
+            image = image.convert("RGB")
+
+        image.thumbnail((max_width, max_height), resample)
+        image.save(thumb_path, "JPEG", quality=quality, optimize=True, progressive=True)
+        return get_image_base64(thumb_path)
+    except Exception:
+        return ""
+
+
+@st.cache_data(show_spinner=False)
+def get_pdf_card_thumbnail(
+    pdf_path: Path,
+    max_width: int = 720,
+    max_height: int = 520,
+    quality: int = 82,
+) -> str:
+    """Render a lightweight first-page PDF thumbnail for list/card previews only."""
+    if not pdf_path.exists():
+        return ""
+    try:
+        import fitz
+        from PIL import Image
+    except Exception:
+        return ""
+
+    RESEARCH_THUMB_DIR.mkdir(parents=True, exist_ok=True)
+    thumb_path = (
+        RESEARCH_THUMB_DIR
+        / f"{_cache_stem(pdf_path, 58)}_pdf_card_{max_width}x{max_height}_q{quality}.jpg"
+    )
+    if thumb_path.exists():
+        return get_image_base64(thumb_path)
+
+    try:
+        doc = fitz.open(pdf_path)
+        page = doc.load_page(0)
+        pix = page.get_pixmap(matrix=fitz.Matrix(1.25, 1.25), alpha=False)
+        doc.close()
+
+        image = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
+        resample = getattr(Image, "Resampling", Image).LANCZOS
+        image.thumbnail((max_width, max_height), resample)
+        image.save(thumb_path, "JPEG", quality=quality, optimize=True, progressive=True)
+        return get_image_base64(thumb_path)
+    except Exception:
+        return ""
 
 
 @st.cache_resource(show_spinner=False)
@@ -322,14 +397,14 @@ def get_research_visual(paper: Dict) -> str:
     """Return a visual block using explicit cover image, or portfolio PDF image, or fallback."""
     cover = paper.get("cover")
     if cover:
-        b64 = get_image_base64(cover)
+        b64 = get_image_thumbnail_base64(cover, max_width=760, max_height=560, quality=84)
         if b64:
-            return f'<img class="paper-image" src="data:image/png;base64,{b64}" />'
+            return f'<img class="paper-image" src="data:image/jpeg;base64,{b64}" loading="lazy" />'
     portfolio_pages = paper.get("portfolio_pages", [])
     if portfolio_pages:
         image_base64 = get_portfolio_image(portfolio_pages[0], zoom=0.8)
         if image_base64:
-            return f'<img class="paper-image" src="data:image/png;base64,{image_base64}" />'
+            return f'<img class="paper-image" src="data:image/png;base64,{image_base64}" loading="lazy" />'
     initials = "".join(word[0] for word in paper["tag"].split()[:2]).upper()
     return (
         '<div class="paper-image paper-fallback">'
