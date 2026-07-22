@@ -146,6 +146,80 @@ def render_css() -> None:
             image-rendering: crisp-edges;
         }
 
+        section[data-testid="stSidebar"] .sidebar-avatar-shell {
+            width: fit-content;
+            margin: 12px auto 16px;
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-toggle {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-trigger {
+            display: block;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            cursor: zoom-in;
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-trigger .sidebar-avatar {
+            margin: 0;
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-trigger:hover .sidebar-avatar {
+            transform: translateY(-2px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.42);
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.48);
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-lightbox {
+            position: fixed;
+            inset: 0;
+            display: none;
+            background: rgba(6, 18, 17, 0.76);
+            backdrop-filter: blur(8px);
+            z-index: 2147483646;
+            cursor: zoom-out;
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-toggle:checked ~ .sidebar-avatar-lightbox {
+            display: block;
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-lightbox-inner {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: min(72vw, 680px);
+            height: min(82vh, 780px);
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+            cursor: default;
+            transform: translate(-50%, -50%);
+            z-index: 2147483647;
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-toggle:checked ~ .sidebar-avatar-lightbox-inner {
+            display: flex;
+        }
+
+        section[data-testid="stSidebar"] .sidebar-avatar-full {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 14px;
+            object-fit: contain;
+        }
+
         section[data-testid="stSidebar"] .sidebar-profile {
             text-align: center;
             padding: 0 12px;

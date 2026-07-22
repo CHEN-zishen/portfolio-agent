@@ -16,6 +16,14 @@ def get_avatar_base64() -> str:
 
 
 @st.cache_data(show_spinner=False)
+def get_avatar_full_base64() -> str:
+    try:
+        return get_image_base64(AVATAR_PATH)
+    except Exception:
+        return ""
+
+
+@st.cache_data(show_spinner=False)
 def get_image_base64(path: Path) -> str:
     if not path.exists():
         return ""

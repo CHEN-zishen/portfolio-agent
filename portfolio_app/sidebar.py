@@ -2,7 +2,7 @@ import os
 
 import streamlit as st
 
-from .assets import get_avatar_base64
+from .assets import get_avatar_base64, get_avatar_full_base64
 from .config import CATEGORIES, CHROMA_DIR, DATA_DIR, DOCS_DIR, get_setting
 from .state import reset_chat_messages
 
@@ -26,9 +26,21 @@ LEGACY_NAVIGATION_LABELS = {
 def render_sidebar():
     try:
         avatar_base64 = get_avatar_base64()
+        avatar_full_base64 = get_avatar_full_base64()
         if avatar_base64:
             st.sidebar.markdown(
-                f'<img src="data:image/jpeg;base64,{avatar_base64}" class="sidebar-avatar" />',
+                f"""
+                <div class="sidebar-avatar-shell">
+                    <input id="sidebar-avatar-toggle" class="sidebar-avatar-toggle" type="checkbox" />
+                    <label for="sidebar-avatar-toggle" class="sidebar-avatar-trigger" aria-label="Open enlarged profile photo">
+                        <img src="data:image/jpeg;base64,{avatar_base64}" class="sidebar-avatar" />
+                    </label>
+                    <label for="sidebar-avatar-toggle" class="sidebar-avatar-lightbox" aria-label="Close enlarged profile photo"></label>
+                    <span class="sidebar-avatar-lightbox-inner">
+                        <img src="data:image/jpeg;base64,{avatar_full_base64 or avatar_base64}" class="sidebar-avatar-full" />
+                    </span>
+                </div>
+                """,
                 unsafe_allow_html=True,
             )
     except Exception:
