@@ -7,7 +7,7 @@ langchain-chroma==0.1.4
 chromadb==0.5.7
 sentence-transformers==3.0.1
 pypdf==4.3.1
-PyMuPDF==1.24.10
+PyMuPDF>=1.25.3
 Pillow==10.4.0
 posthog==2.5.0
 requests==2.32.3
